@@ -12,13 +12,17 @@ FROM base AS builder
 WORKDIR /app
 ENV SKIP_ENV_VALIDATION=1
 ENV DATABASE_URL="postgresql://user:pass@localhost:5432/db"
+
+# Tell Next.js to not prerender pages that use runtime-only code
+ENV NEXT_PHASE=phase-production-build
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/prisma ./prisma
 COPY . .
 
-# Generate Prisma Client for the correct platform
 RUN bunx prisma generate
 
+# Build with output: standalone
 RUN bun run build
 
 # Runner
@@ -35,10 +39,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
-# Copy Prisma for runtime - with correct path
+# Copy native modules
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 USER nextjs
 

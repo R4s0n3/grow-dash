@@ -5,6 +5,11 @@
 import "./src/env.js";
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+	output: 'standalone',
+	experimental: {
+		serverComponentsExternalPackages: ['serialport', '@prisma/client'],
+	},
+};
 
 export default config;
