@@ -1,0 +1,15 @@
+node_modules
+.git
+.env
+.env.local
+.next
+out
+Dockerfile
+docker-compose.yml
+README.md
+.nyc_output
+coverage
+.nyc_output
+.DS_Store
+bun.lockb
+prisma/migrations
