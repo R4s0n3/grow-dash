@@ -29,6 +29,9 @@ RUN bun run build
 FROM base AS runner
 WORKDIR /app
 
+# Install OpenSSL
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
