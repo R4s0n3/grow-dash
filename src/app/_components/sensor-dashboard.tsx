@@ -12,8 +12,14 @@ export function SensorDashboard() {
 		limit: 20
 	});
 
+	const toggleLED = api.arduino.sendCommand.useMutation();
+
+	function handleToggleLED() {
+		toggleLED.mutate({ command: "TOGGLE_PIN6" })
+	}
+
 	return (
-		<div className="space-y-4">
+		<div className="space-y-4 w-full max-w-xl p-2 lg:p w-full max-w-xl p-2 lg:p-4">
 			<div className="rounded-lg border p-4">
 				<h2 className="text-xl font-bold mb-2">Current Reading</h2>
 				{current ? (
@@ -41,6 +47,10 @@ export function SensorDashboard() {
 						</div>
 					))}
 				</div>
+			</div>
+
+			<div className="rounded-lg border p-4">
+				<button onClick={handleToggleLED}>Toogle LED</button>
 			</div>
 		</div>
 	);
